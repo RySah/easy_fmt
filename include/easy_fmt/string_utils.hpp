@@ -6,25 +6,26 @@
 #include <format>
 #include <type_traits>
 #include <algorithm>
+#include <functional>
 
 #define EASY_FMT_NAMESPACE easy_fmt
 #define EASY_FMT_STRING_UTILS_NAMESPACE easy_fmt::string_utils
 
-namespace EASY_FMT_STRING_UTILS_NAMESPACE
+namespace easy_fmt::string_utils
 {
 
-    inline std::string trimStart(std::string_view s) {
-		auto it = std::find_if_not(s.begin(), s.end(), [](char c) { return std::isspace(c); });
+    inline std::string trimStart(std::string_view s, std::function<int(int)> predicate = std::isspace) {
+		auto it = std::find_if_not(s.begin(), s.end(), [](char c) { return predicate(c); });
 		return std::string(it, s.end());
 	}
 
-	inline std::string trimEnd(std::string_view s) {
-		auto it = std::find_if_not(s.rbegin(), s.rend(), [](char c) { return std::isspace(c); });
+	inline std::string trimEnd(std::string_view s, std::function<int(int)> predicate = std::isspace) {
+		auto it = std::find_if_not(s.rbegin(), s.rend(), [](char c) { return predicate(c); });
 		return std::string(s.begin(), it.base());
 	}
 
-	inline std::string trim(std::string_view s) {
-		return trimEnd(trimStart(s));
+	inline std::string trim(std::string_view s, std::function<int(int)> predicate = std::isspace) {
+		return trimEnd(trimStart(s, predicate), predicate);
 	}
 
 	inline std::vector<std::string> split(std::string_view s, char delimiter) {
@@ -152,4 +153,4 @@ namespace EASY_FMT_STRING_UTILS_NAMESPACE
         return std::format("{}", value);
     }
 
-} // namespace ENGINE_STRING_UTILS_NAMESPACE
+} // namespace easy_fmt::string_utils

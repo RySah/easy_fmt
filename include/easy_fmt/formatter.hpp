@@ -98,15 +98,13 @@ namespace EASY_FMT_NAMESPACE
 #define FORMATTER_MODULE_TYPE(ReturnType, ...) function<ReturnType(__VA_ARGS__)>
 #define FORMATTER_CREATE_MODULE(Type, Name, ...) Type Name = __VA_ARGS__;
 #define FORMATTER_CREATE_ENUM_MAP_MODULE(Type, Name, AsUnderlying, ...) \
-    FORMATTER_CREATE_MODULE( \
-        FORMATTER_MODULE_TYPE(string, Type), \
-        Name, \
+    FORMATTER_CREATE_MODULE(                                            \
+        FORMATTER_MODULE_TYPE(string, Type),                            \
+        Name,                                                           \
         [](Type v) -> string { \
             unordered_map<Type, string> m = __VA_ARGS__ ; \
             if (m.contains(v)) return m[v]; \
-            else return to_string(AsUnderlying(v)); \
-        } \
-    )
+            else return EASY_FMT_STRING_UTILS_NAMESPACE::toString(AsUnderlying(v)); })
 #define FORMATTER_CREATE_SWITCH_MODULE(Type, Name, ...) \
     FORMATTER_CREATE_MODULE( \
         FORMATTER_MODULE_TYPE(string, Type), \
