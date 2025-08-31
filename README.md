@@ -107,7 +107,7 @@ std::cout << std::format("{:sU}", level);    // Outputs: WARN
 
 This section explains all the available functions and there uses.
 
-### Types "formatter.hpp" "east_fmt.hpp
+### Types "formatter.hpp" "easy_fmt.hpp"
 
 ```cpp
 enum class FormatterNamespaceOption : unsigned char {
@@ -211,8 +211,10 @@ FORMATTER_CREATE_SWITCH_MODULE(
 ### Utility Module Macros
 
 #### String Manipulation Modules
-- `FORMATTER_TRIM_MODULE`: Adds trim functionality
-- `FORMATTER_TRIMMING_MODULES`: Adds all trimming functions (start, end, both)
+- `FORMATTER_TRIM_MODULE`: Adds TRIM
+- `FORMATTER_TRIM_START_MODULE`: Adds TRIM_START
+- `FORMATTER_TRIM_END_MODULE`: Adds TRIM_END
+- `FORMATTER_TRIMMING_MODULES`: Adds all trimming functions (TRIM_START, TRIM_END, TRIM)
 - `FORMATTER_CASE_CONVERSION_MODULES`: Adds case conversion functions
 - `FORMATTER_SPLIT_JOIN_MODULES`: Adds string splitting and joining functions
 
@@ -269,8 +271,3 @@ This creates a formatter that:
 2. Adds case conversion capabilities
 3. Creates two custom modules for prefix and suffix extraction
 4. Formats the output with uppercase prefix and lowercase suffix
-
-## License
-
-[Add your license information here]
-

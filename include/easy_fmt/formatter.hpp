@@ -130,7 +130,7 @@ namespace EASY_FMT_NAMESPACE
 #define FORMATTER_TRIM_MODULE \
     FORMATTER_CREATE_MODULE( \
         FORMATTER_MODULE_TYPE(string, string_view), \
-        TRIM_END, \
+        TRIM, \
         EASY_FMT_STRING_UTILS_NAMESPACE::trim \
     )
 #define FORMATTER_TRIMMING_MODULES \

@@ -7,6 +7,7 @@
 #include <type_traits>
 #include <algorithm>
 #include <functional>
+#include <span>
 
 #define EASY_FMT_NAMESPACE easy_fmt
 #define EASY_FMT_STRING_UTILS_NAMESPACE easy_fmt::string_utils
@@ -15,17 +16,89 @@ namespace easy_fmt::string_utils
 {
 
     inline std::string trimStart(std::string_view s, std::function<int(int)> predicate = std::isspace) {
-		auto it = std::find_if_not(s.begin(), s.end(), [](char c) { return predicate(c); });
+		auto it = std::find_if_not(s.begin(), s.end(), [&](char c) { return predicate(c); });
 		return std::string(it, s.end());
 	}
 
+	inline std::string trimStart(std::string_view s, char predicate) {
+		return trimStart(s, [&](int c) -> int { return (int)predicate == c; });
+	}
+
+	inline std::string trimStart(std::string_view s, std::string_view predicate) {;
+		if (predicate.size() == 1) return trimStart(s, predicate[0]);
+		return trimStart(s, [&](int c) -> int { 
+			for (const auto& ch : predicate) {
+				if (ch == c) return 1;
+			}
+			return 0;
+		});
+	}
+
+	inline std::string trimStart(std::string_view s, std::span<const char> predicate) {;
+		if (predicate.size() == 1) return trimStart(s, predicate[0]);
+		return trimStart(s, [&](int c) -> int { 
+			for (const auto& ch : predicate) {
+				if (ch == c) return 1;
+			}
+			return 0;
+		});
+	}
+
 	inline std::string trimEnd(std::string_view s, std::function<int(int)> predicate = std::isspace) {
-		auto it = std::find_if_not(s.rbegin(), s.rend(), [](char c) { return predicate(c); });
+		auto it = std::find_if_not(s.rbegin(), s.rend(), [&](char c) { return predicate(c); });
 		return std::string(s.begin(), it.base());
+	}
+
+	inline std::string trimEnd(std::string_view s, char predicate) {
+		return trimEnd(s, [&](int c) -> int { return (int)predicate == c; });
+	}
+
+	inline std::string trimEnd(std::string_view s, std::string_view predicate) {
+		if (predicate.size() == 1) return trimEnd(s, predicate[0]);
+		return trimEnd(s, [&](int c) -> int { 
+			for (const auto& ch : predicate) {
+				if (ch == c) return 1;
+			}
+			return 0; 
+		});
+	}
+
+	inline std::string trimEnd(std::string_view s, std::span<const char> predicate) {;
+		if (predicate.size() == 1) return trimEnd(s, predicate[0]);
+		return trimEnd(s, [&](int c) -> int { 
+			for (const auto& ch : predicate) {
+				if (ch == c) return 1;
+			}
+			return 0;
+		});
 	}
 
 	inline std::string trim(std::string_view s, std::function<int(int)> predicate = std::isspace) {
 		return trimEnd(trimStart(s, predicate), predicate);
+	}
+
+	inline std::string trim(std::string_view s, char predicate) {
+		return trim(s, [&](int c) -> int { return (int)predicate == c; });
+	}
+
+	inline std::string trim(std::string_view s, std::string_view predicate) {
+		if (predicate.size() == 1) return trim(s, predicate[0]);
+		return trim(s, [&](int c) -> int { 
+			for (const auto& ch : predicate) {
+				if (ch == c) return 1;
+			}
+			return 0; 
+		});
+	}
+
+	inline std::string trim(std::string_view s, std::span<const char> predicate) {;
+		if (predicate.size() == 1) return trim(s, predicate[0]);
+		return trim(s, [&](int c) -> int { 
+			for (const auto& ch : predicate) {
+				if (ch == c) return 1;
+			}
+			return 0;
+		});
 	}
 
 	inline std::vector<std::string> split(std::string_view s, char delimiter) {
