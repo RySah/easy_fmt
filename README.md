@@ -1,5 +1,8 @@
 # EasyFMT
 
+> [!CAUTION]
+> The libary is ASSUMED to be ready for commercial use, bugs may still be present.
+
 A modern C++ header-only formatting library that provides powerful string manipulation utilities and custom formatter creation capabilities for std::format.
 
 ## Features
