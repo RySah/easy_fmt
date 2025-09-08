@@ -15,7 +15,7 @@
 namespace easy_fmt::string_utils
 {
 
-    inline std::string trimStart(std::string_view s, std::function<int(int)> predicate = std::isspace) {
+    inline std::string trimStart(std::string_view s, std::function<int(int)> predicate) {
 		auto it = std::find_if_not(s.begin(), s.end(), [&](char c) { return predicate(c); });
 		return std::string(it, s.end());
 	}
@@ -44,7 +44,7 @@ namespace easy_fmt::string_utils
 		});
 	}
 
-	inline std::string trimEnd(std::string_view s, std::function<int(int)> predicate = std::isspace) {
+	inline std::string trimEnd(std::string_view s, std::function<int(int)> predicate) {
 		auto it = std::find_if_not(s.rbegin(), s.rend(), [&](char c) { return predicate(c); });
 		return std::string(s.begin(), it.base());
 	}
@@ -73,7 +73,7 @@ namespace easy_fmt::string_utils
 		});
 	}
 
-	inline std::string trim(std::string_view s, std::function<int(int)> predicate = std::isspace) {
+	inline std::string trim(std::string_view s, std::function<int(int)> predicate) {
 		return trimEnd(trimStart(s, predicate), predicate);
 	}
 
