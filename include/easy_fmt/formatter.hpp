@@ -79,7 +79,11 @@ namespace EASY_FMT_NAMESPACE
         template <typename FormatContext> \
         auto format(const Type& OBJ, FormatContext& ctx) const { \
             Modules \
-            std::string temp_result = std::format(StringFmt, __VA_ARGS__); \
+            std::string temp_result \
+            { \
+                std::back_insert_iterator<std::string> it(temp_result); \
+                std::format_to(it,StringFmt, __VA_ARGS__); \
+            } \
             switch (__FORMATTER_FORMATTER_NAMESPACE_OPTION_NAME) { \
             case EASY_FMT_NAMESPACE::FormatterNamespaceOption::eShort: { \
                 auto pos = temp_result.rfind("::"); \
