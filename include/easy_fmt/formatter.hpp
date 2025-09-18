@@ -82,7 +82,7 @@ namespace EASY_FMT_NAMESPACE
             std::string temp_result \
             { \
                 std::back_insert_iterator<std::string> it(temp_result); \
-                std::format_to(it,StringFmt, __VA_ARGS__); \
+                std::format_to(it, StringFmt, __VA_ARGS__); \
             } \
             switch (__FORMATTER_FORMATTER_NAMESPACE_OPTION_NAME) { \
             case EASY_FMT_NAMESPACE::FormatterNamespaceOption::eShort: { \
