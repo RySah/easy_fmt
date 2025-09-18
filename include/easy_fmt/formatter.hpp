@@ -4,6 +4,7 @@
 #include <functional>
 #include <unordered_map>
 #include <variant>
+#include <type_traits>
 
 #include "string_utils.hpp"
 
@@ -22,7 +23,24 @@ namespace EASY_FMT_NAMESPACE
         eUpper
     };
 
+    template <typename T, typename = void>
+    struct is_formattable : std::false_type
+    {
+    };
+
+    // Specialization: true if format("{}", t) compiles
+    template <typename T>
+    struct is_formattable<T, std::void_t<decltype(std::format("{}", std::declval<T const &>()))>> : std::true_type
+    {
+    };
+
+    template <typename T>
+    inline constexpr bool is_formattable_v = is_formattable<T>::value;
+
 } // namespace EASY_FMT_NAMESPACE
+
+#define __xstr(a) __str(a)
+#define __str(a) #a
 
 #define __FORMATTER_FORMATTER_NAMESPACE_OPTION_NAME NAMESPACE_OPTION
 #define __FORMATTER_FORMATTER_CASE_OPTION_NAME CASE_OPTION
@@ -97,6 +115,9 @@ namespace EASY_FMT_NAMESPACE
 
 #define FORMATTER_MODULE_TYPE(ReturnType, ...) function<ReturnType(__VA_ARGS__)>
 #define FORMATTER_CREATE_MODULE(Type, Name, ...) Type Name = __VA_ARGS__;
+
+#define ASSERT_IS_FORMATTABLE(Item) static_assert(EASY_FMT_NAMESPACE::is_formattable_v<Item>, __xstr(Item) " is not formattable.");
+
 #define FORMATTER_CREATE_ENUM_MAP_MODULE(Type, Name, AsUnderlying, ...) \
     FORMATTER_CREATE_MODULE(                                            \
         FORMATTER_MODULE_TYPE(string, Type),                            \
@@ -105,6 +126,7 @@ namespace EASY_FMT_NAMESPACE
             unordered_map<Type, string> m = __VA_ARGS__ ; \
             if (m.contains(v)) return m[v]; \
             else return EASY_FMT_STRING_UTILS_NAMESPACE::toString(AsUnderlying(v)); })
+
 #define FORMATTER_CREATE_SWITCH_MODULE(Type, Name, ...) \
     FORMATTER_CREATE_MODULE( \
         FORMATTER_MODULE_TYPE(string, Type), \
